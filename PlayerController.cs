@@ -7,43 +7,54 @@ public class PlayerController : MonoBehaviour
     Rigidbody2D rb2d;
     [SerializeField] float torqueAmount = 30f;
     [SerializeField] float jumpAmount = 20f;
-    Transform playerTransform; 
+    Transform playerTransform;
     int leftBool = 0;
+    public FloorData floorScript;
     // Start is called before the first frame update
     void Start()
     {
-       rb2d = GetComponent<Rigidbody2D>();
-       playerTransform = GetComponent<Transform>();
+        rb2d = GetComponent<Rigidbody2D>();
+        playerTransform = GetComponent<Transform>();
+        floorScript = GameObject.FindObjectOfType<FloorData>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKey(KeyCode.LeftArrow)){
+        if (Input.GetKey(KeyCode.LeftArrow))
+        {
             rb2d.AddTorque(torqueAmount);
-        } else if(Input.GetKey(KeyCode.RightArrow)){
+        }
+        else if (Input.GetKey(KeyCode.RightArrow))
+        {
             rb2d.AddTorque(-torqueAmount);
         }
-        if(Input.GetKey("a") && leftBool == 0){
+        if (Input.GetKey("a") && leftBool == 0)
+        {
             Vector3 currentScale = playerTransform.localScale;
             currentScale.x *= -1;
             playerTransform.localScale = currentScale;
             leftBool = 1;
+            floorScript.ChangeDirection(0);
             //Debug.Log("player location: " + playerTransform.localScale);
         }
-        if(Input.GetKey("d") && leftBool == 1){
+        if (Input.GetKey("d") && leftBool == 1)
+        {
             Vector3 currentScale = playerTransform.localScale;
             currentScale.x *= -1;
             playerTransform.localScale = currentScale;
             leftBool = 0;
+            floorScript.ChangeDirection(1);
         }
-        
+
     }
 
-    void OnCollisionStay2D(Collision2D other) {
-        if (Input.GetKey(KeyCode.UpArrow)){
-                rb2d.AddForce(transform.up * jumpAmount, ForceMode2D.Impulse);
-            
+    void OnCollisionStay2D(Collision2D other)
+    {
+        if (Input.GetKey(KeyCode.UpArrow))
+        {
+            rb2d.AddForce(transform.up * jumpAmount, ForceMode2D.Impulse);
+
         }
     }
 }
